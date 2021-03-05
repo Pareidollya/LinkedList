@@ -6,14 +6,14 @@ package LinkedList;
  */
 public class Cell <T>{
     private Cell proxima;
-    private cavalo elemento;
+    private T elemento;
     
 
-    public Cell(Cell proxima, cavalo elemento) {
+    public Cell(Cell proxima, T elemento) {
         this.proxima = proxima;
         this.elemento = elemento;
     }
-    public Cell (cavalo elemento){ //primeiroa
+    public Cell (T elemento){ //primeiroa
         this.elemento = elemento;
     }
 
@@ -25,11 +25,11 @@ public class Cell <T>{
         this.proxima = proxima;
     }
 
-    public cavalo getElemento() {
+    public T getElemento() {
         return elemento;
     }
 
-        public void setElemento(cavalo elemento) {
+        public void setElemento(T elemento) {
         this.elemento = elemento;
     }
     
