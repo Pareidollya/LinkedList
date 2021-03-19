@@ -21,33 +21,17 @@ public class main {
         lista.adicionaFirst(c2);
         
         cavalo c3 = new cavalo("3");
-        lista.adicionaFirst(c3);
+        lista.adiciona(1, c3);
         
         cavalo c4 = new cavalo("4");
         lista.adicionLast(c4);
-        
-        cavalo c5 = new cavalo("5");
-        lista.adicionLast(c5);
-        
-        cavalo c7 = new cavalo("7");
-        
-        System.out.println(lista.existeDados(c7));
-        
+         
+        System.out.println(lista.tamanho());    
         lista.printList();
         
-        lista.adiciona(2, c7);
-        
-        //lista.removeFim();
-        lista.remove(4);
-        
+        lista.remove(0);
+        System.out.println(lista.tamanho());    
         lista.printList();
-        
-        
-        
-        System.out.println(lista.tamanho());
-        
-       
-     
     }
     
 }

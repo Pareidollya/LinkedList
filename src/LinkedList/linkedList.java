@@ -5,6 +5,7 @@ package LinkedList;
  *
  * @author jj
  */
+//remover iterações 
 public class linkedList <T>{
     private Cell first;
     private Cell last;
@@ -30,7 +31,7 @@ public class linkedList <T>{
     
     public void adiciona(int pos, cavalo elemento){
         this.VerificarPosição(pos);
-        Iterador it = new Iterador(this.first);
+        Iterador it = new Iterador(this.first);   
         int i = 0;
         
         while (it.hasNext()){
@@ -39,10 +40,11 @@ public class linkedList <T>{
                 i++;
             }
             else{
-                Cell nova = new Cell(it.getAtual().getProxima(),elemento);
+                Cell nova = new Cell(it.getAtual().getProxima(),it.getAtual(),elemento);
                 System.out.println(elemento.getCavalo() + " Adicionado como proximo de "+ it.getAtual().getElemento()+ 
                         " proximo: " + it.getAtual().getProxima().getElemento());
                 
+                it.getAtual().getProxima().setAnterior(nova); //atualiza o anterior do proximo 
                 it.getAtual().setProxima(nova);
                 this.elementos++;
                 break;
@@ -50,23 +52,26 @@ public class linkedList <T>{
         }
     }
     public void adicionaFirst(cavalo elemento){
-        Cell nova = new Cell(this.first,elemento);
+        Cell nova = new Cell(this.first,null,elemento);
         
         if (this.elementos == 0){
             this.first = this.last = nova;
             this.elementos++;
-            System.out.println(nova.getElemento() +" Adicionado no inicio, sua proxima é: " + nova.getProxima());
+            System.out.println(nova.getElemento()+"add inicio, anterior: "+ nova.getAnterior() + ", proxima: " + nova.getProxima());
         }
         else{
             nova.setProxima(first); //a celula do inicio torna-se a proxima da nova adicionada
+            
+            nova.getProxima().setAnterior(nova);//a atual se torna anterior da nova proxima 
+            
             this.first = nova;
             this.elementos++;
-            System.out.println(nova.getElemento() +" Adicionado no inicio, sua proxima é: " + nova.getProxima().getElemento());
+            System.out.println(nova.getElemento() +" add inicio, anterior: "+nova.getAnterior()+ ", proxima: " + nova.getProxima().getElemento().getCavalo());
         }      
     }
   
     public void adicionLast(cavalo elemento){
-        Cell nova = new Cell(null,elemento); //proximo do ultimo = null
+        Cell nova = new Cell(null,this.last,elemento); //proximo do ultimo = null
         
         if (this.elementos == 0){
             this.first = this.last = nova;
@@ -76,34 +81,41 @@ public class linkedList <T>{
         
         else{
             this.last.setProxima(nova);
+            this.last.setAnterior(this.anterior(this.last));
             this.last = nova;
-            System.out.println(nova.getElemento()+" adicionado no final, seu proximo é:  " + nova.getProxima());
+            System.out.println(nova.getElemento()+" add final, seu proximo é:  " + nova.getProxima());
             this.elementos++;
         }
     }
+    
     public void remove(int pos){
         this.VerificarPosição(pos);
         Iterador it = new Iterador(this.first);
         
-        if (pos == 0)
+        if (pos == 0){
             this.removeInicio();
+        }
+        else if (pos == this.elementos - 1){
+            this.removeFim();
+        }
+        else{
         int i = 0;
-        
         while (it.hasNext()){
             if (i != (pos - 1)){
                 it.next();
                 i++;
             }
             else{
-                 System.out.println(it.getAtual().getProxima().getElemento() + 
-                         " Removido, proximo: "+ it.getAtual().getProxima().getProxima().getElemento());
-                it.getAtual().setProxima(it.getAtual().getProxima().getProxima());
-                this.elementos--;
-                break;
+                 System.out.println(it.getAtual().getProxima()+" Removido");        
+                 
+                it.getAtual().getProxima().setAnterior(it.getAtual());
+                it.getAtual().setProxima(it.getAtual().getProxima().getProxima()); 
                 
-            }
-        
-        }
+                this.elementos--;
+                break;  
+            }     
+        }            
+        }    
     }
     public void removeInicio(){
         if(this.elementos == 0){
@@ -114,8 +126,9 @@ public class linkedList <T>{
             this.elementos--;
         }
         else{
-            System.out.println(this.first.getElemento()+ " Removido do inicio");
+            System.out.println(this.first.getElemento()+ " Removido");
             this.first = first.getProxima();
+            this.first.setAnterior(null);
             this.elementos--;
         }
         
@@ -134,10 +147,11 @@ public class linkedList <T>{
         
         while(it.hasNext()){
             if(it.getAtual().getProxima().getProxima() == null){
-                System.out.println(it.getAtual().getProxima().getElemento() + " Removido");
+                System.out.println(it.getAtual().getProxima() + " Removido");
                 it.getAtual().setProxima(null);
                 this.last = null;
                 this.last = it.getAtual();
+                this.last.setAnterior(this.anterior(it.getAtual()));
                 
                 this.elementos--;
                 
@@ -190,13 +204,13 @@ public class linkedList <T>{
         Iterador it = new Iterador(this.first);
         System.out.println("\nprint lista");
         while (it.hasNext()){
-            System.out.println(it.getAtual().getElemento()+ " Seu proximo é " + it.getAtual().getProxima());
+            System.out.println(it.getAtual()+" anterior: "+it.getAtual().getAnterior() +" proximo: " + it.getAtual().getProxima());
             it.next();
              
         }
     }
     
-    public void limpaChat(){
+    public void limpa(){
         this.Vazia();
         
         Iterador it = new Iterador(this.first);
@@ -228,6 +242,21 @@ public class linkedList <T>{
        else if (pos < 0){
            throw new IllegalArgumentException("Posição invalida!");
        }
+    }
+    
+    public Cell anterior(Cell elemento){ //retorna o elemento anterior do citado 
+        Iterador it = new Iterador(this.first);
+        
+        while(it.hasNext()){
+            if (it.getAtual().getProxima().equals(elemento) == true){
+                break;
+            }
+            else{
+                it.next();
+            }       
+        }
+        return it.getAtual();
+        
     }
             
 }
