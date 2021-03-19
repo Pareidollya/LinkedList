@@ -12,26 +12,29 @@ package LinkedList;
 public class main {
 
     public static void main(String[] args) {
-        linkedList lista = new linkedList();
+        cavalo cabeça = new cavalo("HeadC0");
+        ListaDuplamenteEncadeada lista = new ListaDuplamenteEncadeada(cabeça);
         
         cavalo c1 = new cavalo("1");
-        lista.adicionaFirst(c1);
+        lista.adicionaFim(c1);
+
+        System.out.println(lista.tamanho());    
+        lista.print();
         
         cavalo c2 = new cavalo("2");
-        lista.adicionaFirst(c2);
+        lista.adicionaInicio(c2);
+     
+        System.out.println(lista.tamanho());
+        lista.print();
         
         cavalo c3 = new cavalo("3");
-        lista.adiciona(1, c3);
+        lista.adicionaFim(c3);
         
-        cavalo c4 = new cavalo("4");
-        lista.adicionLast(c4);
-         
-        System.out.println(lista.tamanho());    
-        lista.printList();
-        
-        lista.remove(0);
-        System.out.println(lista.tamanho());    
-        lista.printList();
+        //lista.removeInicio();
+        //lista.removeFim();
+        //lista.removeInicio();
+        System.out.println(lista.tamanho());
+        lista.print();
     }
     
 }
